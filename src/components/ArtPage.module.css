@@ -1,0 +1,8 @@
+.root {
+  min-height: 100vh;
+  background: var(--ab);
+}
+
+.main {
+  padding-top: var(--nav-h);
+}

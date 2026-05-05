@@ -1,185 +1,114 @@
-# Art Portfolio Site — Setup Guide
+# Yu JunJie — Art Portfolio
 
-## Tech Stack (No Frills)
-
-| Layer | Tool | Why |
-|---|---|---|
-| Frontend | Plain HTML + CSS + Vanilla JS | No build step, full control |
-| Backend | Node.js + Express | Handles forms, file uploads |
-| Database | SQLite | Zero config, file-based, perfect for this scale |
-| Email | Nodemailer | Sends you inquiry alerts + auto-replies to clients |
-| Server | Nginx | Serves static files fast, proxies API to Node |
-| Process | PM2 | Keeps Node running after you close SSH |
-| SSL | Let's Encrypt (Certbot) | Free HTTPS |
+Next.js 14 + Supabase art gallery for oil paintings. Features:
+- Gallery with filter (All / Portraits / Landscapes / Available / In Progress / Sold)
+- Artwork detail pages
+- AI-powered commission questionnaire (generates a creative brief via Claude)
+- Contact / enquiry modal
+- All artwork data stored in Supabase
 
 ---
 
-## First-Time Setup (Do This Once)
+## Local Setup
 
-### 1. Clone / upload your files to the server
-```bash
-# On your server (SSH in first)
-mkdir -p /var/www/artsite
-cd /var/www/artsite
-# Upload your files here via FTP, SCP, or git clone
-```
+### 1. Install dependencies
 
-### 2. Install Node.js (if not already installed)
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-### 3. Install dependencies
-```bash
-cd /var/www/artsite
 npm install
 ```
 
-### 4. Set up your environment variables
+### 2. Set up Supabase
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Open the **SQL Editor** and run the contents of `supabase/schema.sql` — this creates the tables and seeds sample artworks
+3. Go to **Settings → API** and copy your project URL and anon key
+
+### 3. Configure environment variables
+
 ```bash
-cp .env.example .env
-nano .env   # Fill in your Gmail and email address
+cp .env.local.example .env.local
 ```
 
-To get a Gmail App Password:
-1. Go to myaccount.google.com → Security → 2-Step Verification → App passwords
-2. Create a password for "Mail"
-3. Paste it into SMTP_PASS in your .env file
+Then edit `.env.local`:
 
-### 5. Install and configure Nginx
-```bash
-sudo apt install nginx
-sudo cp nginx/artsite.conf /etc/nginx/sites-available/artsite
-sudo ln -s /etc/nginx/sites-available/artsite /etc/nginx/sites-enabled/
-# Edit the conf file to replace yourdomain.com with your actual domain
-sudo nano /etc/nginx/sites-available/artsite
-sudo nginx -t       # Test config
-sudo systemctl reload nginx
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
+OPENAI_API_KEY=sk-ant-your-key-here
 ```
 
-### 6. Get free HTTPS with Let's Encrypt
+### 4. Run locally
+
 ```bash
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
-# Follow the prompts — it handles everything automatically
+npm run dev
 ```
 
-### 7. Install PM2 and start the server
-```bash
-sudo npm install -g pm2
-cd /var/www/artsite
-pm2 start server/index.js --name artsite
-pm2 save          # Save so it restarts on server reboot
-pm2 startup       # Follow the command it outputs
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Gallery page (server, fetches artworks)
+│   ├── globals.css         # Design tokens & global styles
+│   ├── art/[id]/
+│   │   └── page.tsx        # Artwork detail page
+│   └── api/
+│       ├── artworks/       # GET list, GET single
+│       ├── contacts/       # POST contact form
+│       └── generate-brief/ # POST AI brief generation
+├── components/
+│   ├── ArtPage.tsx         # Client shell (modal state)
+│   ├── Nav.tsx             # Navigation bar
+│   ├── Gallery.tsx         # Filterable gallery grid
+│   ├── ArtworkCard.tsx     # Individual artwork card
+│   ├── ArtworkDetailPage.tsx
+│   ├── ContactModal.tsx    # Contact/enquiry modal
+│   └── CommissionQuestionnaire.tsx  # 6-step AI questionnaire
+└── lib/
+    ├── supabase.ts         # Supabase client
+    └── types.ts            # TypeScript types
+supabase/
+└── schema.sql              # Tables + seed data — run in Supabase SQL Editor
 ```
 
 ---
 
-## Day-to-Day Usage
+## Adding Artworks
 
-### Adding a new painting
-Open `public/js/paintings.js` and add an entry to the `paintings` array:
-```js
-{
-  id:       "my-new-painting",   // unique slug, no spaces
-  title:    "Painting Title",
-  category: "portrait",          // portrait | landscape | textured
-  size:     "60 × 80 cm",
-  medium:   "Oil on canvas",
-  price:    1100,                // SGD, use 0 for "price on request"
-  status:   "available",         // available | sold | displayed | nfs
-  img:      "/images/my-photo.jpg",
-  story:    "One or two sentences about this piece."
-}
-```
-Then upload the photo to `/var/www/artsite/public/images/`
+Artworks live in the `artworks` table in Supabase. Add new rows with:
 
-That's it — it appears automatically on Gallery, Shop, and Homepage.
+| Column | Description |
+|--------|-------------|
+| `id` | URL slug, e.g. `autumn-study` |
+| `title` | Painting title |
+| `year` | Year as string |
+| `medium` | e.g. `Oil on canvas` |
+| `dimensions` | e.g. `60×80cm` |
+| `status` | `available` / `sold` / `in-progress` |
+| `theme` | `portrait` / `landscape` |
+| `description` | About this piece |
+| `inspiration` | Inspiration text |
+| `process` | Process notes |
+| `gradient_bg` | CSS gradient for placeholder (until you upload an image) |
+| `image_url` | Public Supabase Storage URL (optional) |
+| `sort_order` | Integer, lower = earlier in grid |
 
-### Marking a painting as sold
-Change `status: "available"` to `status: "sold"` in paintings.js
+### Uploading images
 
-### Viewing commission inquiries
-```bash
-# In your browser (only accessible locally for security):
-curl http://localhost:3000/api/admin/commissions
-```
-Or add this to your Nginx config to password-protect it for browser access.
-
-### Checking server status
-```bash
-pm2 status          # Is Node running?
-pm2 logs artsite    # See recent logs / errors
-sudo systemctl status nginx   # Is Nginx running?
-```
-
-### Restarting after changes
-```bash
-pm2 restart artsite   # Restart Node server
-sudo systemctl reload nginx   # Reload Nginx config
-```
+1. Create a public bucket in Supabase Storage named `artworks`
+2. Upload images (recommended: `.webp`, aspect ratio 3:4)
+3. Copy the public URL and paste it into the `image_url` column
 
 ---
 
-## File Structure
+## Deploying to Vercel
 
-```
-artsite/
-├── public/              ← Everything the browser sees
-│   ├── css/
-│   │   └── style.css    ← Edit CSS variables here to change your palette/fonts
-│   ├── js/
-│   │   ├── paintings.js ← ADD YOUR PAINTINGS HERE
-│   │   └── layout.js    ← Shared nav/footer — edit your name and links here
-│   ├── images/          ← Upload your painting photos here
-│   ├── pages/
-│   │   ├── gallery.html
-│   │   ├── shop.html
-│   │   ├── commissions.html
-│   │   ├── about.html
-│   │   └── contact.html
-│   └── index.html       ← Homepage
-├── server/
-│   ├── index.js         ← Express server (forms, file uploads, DB)
-│   └── mailer.js        ← Email templates
-├── data/                ← SQLite database lives here (auto-created)
-├── uploads/             ← Client reference photos stored here
-├── nginx/
-│   └── artsite.conf     ← Nginx configuration
-├── .env                 ← Your secrets (never commit this to git)
-├── .env.example         ← Template for .env
-└── package.json
-```
-
----
-
-## Customise Your Site
-
-### Change your name / brand
-- `public/js/layout.js` — line with `nav__brand` — change "Your Name"
-- `public/js/layout.js` — footer copyright line
-- Every HTML `<title>` tag in the pages
-
-### Change colors and fonts
-Edit the `:root` variables at the top of `public/css/style.css`:
-```css
---color-accent: #B5662A;    /* your highlight color */
---color-bg:     #FAF8F5;    /* background */
---font-heading: 'Cormorant Garamond', serif;
---font-body:    'Jost', sans-serif;
-```
-Swap the Google Fonts import URL at the top of style.css for any fonts you prefer.
-
-### Update your Instagram / Etsy links
-`public/js/layout.js` — footer section near the bottom.
-
----
-
-## What Each Part Does
-
-- **Nginx** serves your HTML/CSS/JS/images super fast directly from disk
-- **Node.js + Express** only gets involved when a form is submitted — it saves to SQLite and sends emails
-- **SQLite** stores every commission inquiry and contact message as a backup (even if email fails)
-- **PM2** makes sure Node restarts automatically if it crashes or the server reboots
-- **Let's Encrypt** gives you free HTTPS (auto-renews every 90 days)
+1. Push your repo to GitHub
+2. Import in Vercel
+3. Add the three environment variables in Vercel's project settings
+4. Deploy — ISR (60s revalidation) keeps the gallery up to date automatically

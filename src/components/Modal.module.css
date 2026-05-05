@@ -1,0 +1,203 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn 0.18s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 2.5rem;
+  animation: slideUp 0.22s ease;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark variant (contact modal) */
+.dark {
+  background: #0F0F14;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.92);
+}
+.dark h2 {
+  font-family: 'Cormorant', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 0.3rem;
+}
+.dark .sub { color: rgba(255, 255, 255, 0.45); }
+.dark .field label { color: rgba(255, 255, 255, 0.35); }
+.dark .field input,
+.dark .field textarea,
+.dark .field select {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.92);
+}
+.dark .field input:focus,
+.dark .field textarea:focus,
+.dark .field select:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.dark .field select option { background: #1a1a22; }
+.dark .close { color: rgba(255, 255, 255, 0.3); }
+.dark .close:hover { color: rgba(255, 255, 255, 0.9); }
+
+/* Light variant (questionnaire modal) */
+.light {
+  background: var(--ab);
+  border: 1px solid var(--abo);
+  color: var(--at);
+}
+.light h2 {
+  font-family: 'Cormorant', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--at);
+  margin-bottom: 0.3rem;
+}
+.light .sub { color: var(--am); }
+.light .field label { color: var(--am); }
+.light .field input,
+.light .field textarea,
+.light .field select {
+  background: var(--as);
+  border-color: var(--abo);
+  color: var(--at);
+}
+.light .field input:focus,
+.light .field textarea:focus,
+.light .field select:focus {
+  border-color: rgba(139, 104, 66, 0.4);
+}
+.light .field select option { background: var(--ab); color: var(--at); }
+.light .close { color: var(--am); }
+.light .close:hover { color: var(--at); }
+
+/* ── Common elements ── */
+.close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+  transition: color var(--transition);
+}
+
+.sub {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+.field label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  border: 1px solid;
+  border-radius: var(--radius);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  padding: 0.65rem 0.85rem;
+  outline: none;
+  transition: border-color var(--transition);
+  resize: none;
+}
+
+.submit {
+  width: 100%;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #07070A;
+  background: var(--gold);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.8rem;
+  transition: background var(--transition);
+}
+.submit:hover:not(:disabled) { background: #D4B36A; }
+.submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--aa);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  transition: opacity var(--transition), transform var(--transition);
+  margin-top: 1rem;
+}
+.btnPrimary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.errorMsg {
+  font-size: 0.75rem;
+  color: #FF6B6B;
+  margin-bottom: 0.5rem;
+}
+
+.successState {
+  text-align: center;
+  padding: 1rem 0;
+}
+.successIcon {
+  font-size: 2rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.successState h2 {
+  margin-bottom: 0.5rem;
+}
+.successState p {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 500px) {
+  .modal { padding: 1.75rem 1.25rem; }
+}
