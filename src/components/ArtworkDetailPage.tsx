@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Artwork } from '@/lib/types';
+import type { Artwork, ArtworkImage } from '@/lib/types';
 import Nav from './Nav';
 import ContactModal from './ContactModal';
 import CommissionQuestionnaire from './CommissionQuestionnaire';
@@ -11,22 +11,34 @@ import styles from './ArtworkDetail.module.css';
 import pageStyles from './ArtPage.module.css';
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  available:   { label: 'Available for sale', cls: styles.available },
-  sold:        { label: 'Sold',               cls: styles.sold },
-  'in-progress': { label: 'Work in progress', cls: styles.inProgress },
+  available     : { label: 'Available for sale', cls: styles.available },
+  sold          : { label: 'Sold',               cls: styles.sold },
+  'in-progress' : { label: 'Work in progress',   cls: styles.inProgress },
 };
 
 interface Props { artwork: Artwork; }
 
 export default function ArtworkDetailPage({ artwork }: Props) {
-  const [contactOpen, setContactOpen] = useState(false);
+  const [contactOpen,    setContactOpen]    = useState(false);
   const [commissionOpen, setCommissionOpen] = useState(false);
-  const [activeImg, setActiveImg] = useState(0);
+  const [images,         setImages]         = useState<ArtworkImage[]>([]);
+  const [activeIdx,      setActiveIdx]      = useState(0);
+  const [imgsLoading,    setImgsLoading]    = useState(true);
 
   const statusInfo = STATUS_MAP[artwork.status];
 
-  // Use image_url if available, otherwise gradient placeholder (3 fake thumbnails)
-  const hasRealImage = !!artwork.image_url;
+  useEffect(() => {
+    fetch(`/api/artworks/${artwork.id}/images`)
+      .then((r) => r.json())
+      .then((data: ArtworkImage[]) => {
+        setImages(data);
+        setImgsLoading(false);
+      })
+      .catch(() => setImgsLoading(false));
+  }, [artwork.id]);
+
+  const activeImage = images[activeIdx] ?? null;
+  const mainSrc     = activeImage?.url ?? artwork.image_url ?? null;
 
   return (
     <div className={pageStyles.root}>
@@ -34,18 +46,20 @@ export default function ArtworkDetailPage({ artwork }: Props) {
         onContactOpen={() => setContactOpen(true)}
         onCommissionOpen={() => setCommissionOpen(true)}
       />
+
       <main className={pageStyles.main}>
         <div className={styles.inner}>
           <Link href="/" className={styles.back}>← Back to gallery</Link>
 
           <div className={styles.layout}>
-            {/* Left — image */}
-            <div>
+            {/* Left: image viewer */}
+            <div className={styles.imageCol}>
               <div className={styles.mainImg}>
-                {hasRealImage ? (
+                {mainSrc ? (
                   <Image
-                    src={artwork.image_url!}
-                    alt={artwork.title}
+                    key={mainSrc}
+                    src={mainSrc}
+                    alt={activeImage?.caption ?? artwork.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className={styles.img}
@@ -57,27 +71,49 @@ export default function ArtworkDetailPage({ artwork }: Props) {
                     style={{ background: artwork.gradient_bg ?? '#EDEAE2' }}
                   />
                 )}
+                {images.length > 1 && (
+                  <div className={styles.counter}>{activeIdx + 1} / {images.length}</div>
+                )}
+                {activeImage?.caption && (
+                  <div className={styles.caption}>{activeImage.caption}</div>
+                )}
               </div>
-              {/* Thumbnails — show real thumbs if available, else gradient swatches */}
-              <div className={styles.thumbs}>
-                {[0, 1, 2].map((i) => (
-                  <button
-                    key={i}
-                    className={`${styles.thumb} ${activeImg === i ? styles.thumbActive : ''}`}
-                    onClick={() => setActiveImg(i)}
-                    aria-label={`View ${i === 0 ? 'main' : 'detail ' + i}`}
-                  >
-                    <div
-                      className={styles.thumbInner}
-                      style={{ background: artwork.gradient_bg ?? '#EDEAE2' }}
-                    />
-                  </button>
-                ))}
-              </div>
+
+              {/* Thumbnails */}
+              {!imgsLoading && (
+                <div className={styles.thumbs}>
+                  {images.length > 0
+                    ? images.map((img, i) => (
+                        <button
+                          key={img.id}
+                          className={`${styles.thumb} ${activeIdx === i ? styles.thumbActive : ''}`}
+                          onClick={() => setActiveIdx(i)}
+                          aria-label={img.caption ?? `View image ${i + 1}`}
+                        >
+                          <Image
+                            src={img.url}
+                            alt={img.caption ?? `${artwork.title} ${i + 1}`}
+                            fill
+                            sizes="120px"
+                            className={styles.thumbImg}
+                          />
+                        </button>
+                      ))
+                    : [0, 1, 2].map((i) => (
+                        <div key={i} className={`${styles.thumb} ${styles.thumbPlaceholderWrap}`}>
+                          <div
+                            className={styles.thumbPlaceholder}
+                            style={{ background: artwork.gradient_bg ?? '#EDEAE2' }}
+                          />
+                        </div>
+                      ))
+                  }
+                </div>
+              )}
             </div>
 
-            {/* Right — details */}
-            <div>
+            {/* Right: details */}
+            <div className={styles.detailCol}>
               <div className={styles.eyebrow}>
                 {artwork.theme.charAt(0).toUpperCase() + artwork.theme.slice(1)} · {artwork.year}
               </div>
@@ -112,24 +148,15 @@ export default function ArtworkDetailPage({ artwork }: Props) {
               <div className={styles.ctaRow}>
                 {artwork.status === 'available' ? (
                   <>
-                    <button
-                      className={styles.btnPrimary}
-                      onClick={() => setContactOpen(true)}
-                    >
+                    <button className={styles.btnPrimary} onClick={() => setContactOpen(true)}>
                       Enquire to buy
                     </button>
-                    <button
-                      className={styles.btnSecondary}
-                      onClick={() => setCommissionOpen(true)}
-                    >
+                    <button className={styles.btnSecondary} onClick={() => setCommissionOpen(true)}>
                       Commission similar
                     </button>
                   </>
                 ) : (
-                  <button
-                    className={styles.btnPrimary}
-                    onClick={() => setCommissionOpen(true)}
-                  >
+                  <button className={styles.btnPrimary} onClick={() => setCommissionOpen(true)}>
                     Commission a similar piece
                   </button>
                 )}

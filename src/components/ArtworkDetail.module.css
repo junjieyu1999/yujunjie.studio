@@ -29,7 +29,10 @@
   align-items: start;
 }
 
-/* ── Image ── */
+.imageCol { position: sticky; top: calc(var(--nav-h) + 1.5rem); }
+.detailCol {}
+
+/* ── Main image ── */
 .mainImg {
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -38,14 +41,47 @@
   border: 1px solid var(--abo);
   margin-bottom: 0.75rem;
   position: relative;
+  background: var(--as);
 }
-.img { object-fit: cover; }
+.img { object-fit: cover; transition: opacity 0.25s ease; }
 .imgPlaceholder { width: 100%; height: 100%; }
 
+/* Counter badge */
+.counter {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.85);
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  padding: 3px 8px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* Caption */
+.caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.75);
+  background: linear-gradient(transparent, rgba(0,0,0,0.45));
+  padding: 1.5rem 0.85rem 0.65rem;
+  pointer-events: none;
+}
+
+/* ── Thumbnails ── */
 .thumbs {
   display: flex;
   gap: 0.5rem;
 }
+
 .thumb {
   flex: 1;
   aspect-ratio: 1;
@@ -53,14 +89,18 @@
   overflow: hidden;
   border: 1px solid var(--abo);
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.55;
   transition: opacity var(--transition), border-color var(--transition);
   padding: 0;
   background: none;
+  position: relative;   /* needed for Image fill */
 }
-.thumb:hover { opacity: 1; }
-.thumbActive { opacity: 1; border-color: var(--aa); }
-.thumbInner { width: 100%; height: 100%; }
+.thumb:hover     { opacity: 1; }
+.thumbActive     { opacity: 1; border-color: var(--aa); }
+.thumbImg        { object-fit: cover; }
+
+.thumbPlaceholderWrap { cursor: default; }
+.thumbPlaceholder { width: 100%; height: 100%; }
 
 /* ── Detail ── */
 .eyebrow {

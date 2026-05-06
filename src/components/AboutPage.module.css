@@ -1,0 +1,437 @@
+/* ── Shared layout ── */
+.inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--aa);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--aa);
+  flex-shrink: 0;
+}
+
+.sectionLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--aa);
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--abo);
+  display: inline-block;
+}
+
+.sectionHeading {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 300;
+  color: var(--at);
+  margin-top: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+/* ── Buttons ── */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--aa);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  transition: opacity var(--transition), transform var(--transition);
+  text-decoration: none;
+}
+.btnPrimary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--at);
+  background: transparent;
+  border: 1px solid var(--abo);
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+.btnSecondary:hover {
+  border-color: rgba(26, 24, 20, 0.3);
+  background: var(--as);
+}
+
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--am);
+  background: transparent;
+  border: 1px solid var(--abo);
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+.btnGhost:hover { color: var(--at); border-color: rgba(26, 24, 20, 0.3); }
+
+/* ── Hero ── */
+.hero {
+  border-bottom: 1px solid var(--abo);
+  padding: 3.5rem 0 0;
+  animation: fadeUp 0.55s ease both;
+}
+
+.heroInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 5rem;
+  align-items: end;
+}
+
+.heroLeft { padding-bottom: 4rem; }
+
+.heroHeading {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--at);
+  margin-bottom: 1rem;
+}
+.heroHeading em { font-style: italic; color: var(--aa); }
+
+.heroSub {
+  font-size: 0.92rem;
+  font-weight: 300;
+  color: var(--am);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.heroCtas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+/* Portrait */
+.portraitWrap { align-self: end; }
+
+.portraitImgWrap {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
+  position: relative;
+  background: var(--as);
+}
+
+.portraitImg {
+  object-fit: cover;
+  object-position: center top;   /* keeps face in frame — adjust if needed */
+  transition: transform 0.6s ease;
+}
+.portraitImgWrap:hover .portraitImg { transform: scale(1.02); }
+
+.portraitCaption {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--am);
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--abo);
+  text-align: center;
+}
+
+/* ── Bio ── */
+.bio {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--abo);
+  animation: fadeUp 0.55s 0.08s ease both;
+}
+
+.bioGrid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.bioPara {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(26, 24, 20, 0.72);
+  margin-bottom: 1.25rem;
+}
+
+.factList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--abo);
+}
+.fact:first-child { border-top: 1px solid var(--abo); }
+
+.factKey {
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--am);
+  flex-shrink: 0;
+}
+
+.factVal {
+  font-family: 'Cormorant', serif;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: var(--at);
+  text-align: right;
+}
+
+/* ── Philosophy ── */
+.philosophy {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--abo);
+  background: var(--as);
+  animation: fadeUp 0.55s 0.12s ease both;
+}
+
+.philoLayout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.philoTabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: sticky;
+  top: calc(var(--nav-h) + 1.5rem);
+}
+
+.philoTab {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--am);
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition), border-color var(--transition);
+}
+.philoTab:hover { color: var(--at); }
+.philoTabActive {
+  color: var(--at);
+  border-left-color: var(--aa);
+  background: rgba(139, 104, 66, 0.07);
+}
+
+.philoPanel {
+  animation: fadeUp 0.3s ease both;
+}
+
+.philoHeading {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--at);
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+.philoPara {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(26, 24, 20, 0.72);
+  margin-bottom: 1.25rem;
+}
+
+/* ── Influences ── */
+.influences {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--abo);
+  animation: fadeUp 0.55s 0.14s ease both;
+}
+
+.influenceGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  border: 1px solid var(--abo);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.influenceCard {
+  background: var(--as);
+  padding: 1.5rem 1.25rem;
+  border-right: 1px solid var(--abo);
+  transition: background var(--transition);
+}
+.influenceCard:last-child { border-right: none; }
+.influenceCard:hover { background: rgba(139, 104, 66, 0.05); }
+
+.influenceName {
+  font-family: 'Cormorant', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--at);
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.influenceNote {
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--am);
+  line-height: 1.55;
+}
+
+/* ── Process ── */
+.process {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--abo);
+  animation: fadeUp 0.55s 0.16s ease both;
+}
+
+.processSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.processStep {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2rem;
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--abo);
+  align-items: start;
+}
+.processStep:first-child { border-top: 1px solid var(--abo); }
+
+.stepNum {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--aa);
+  padding-top: 0.2rem;
+}
+
+.stepTitle {
+  font-family: 'Cormorant', serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--at);
+  margin-bottom: 0.5rem;
+}
+
+.stepBody {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(26, 24, 20, 0.65);
+}
+
+/* ── Bottom CTA ── */
+.cta {
+  padding: 5rem 0 6rem;
+  animation: fadeUp 0.55s 0.18s ease both;
+}
+
+.ctaBox {
+  background: var(--as);
+  border: 1px solid var(--abo);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.ctaHeading {
+  font-family: 'Cormorant', serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--at);
+  margin-bottom: 0.5rem;
+}
+
+.ctaBody {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--am);
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .influenceGrid { grid-template-columns: repeat(3, 1fr); }
+  .philoLayout { grid-template-columns: 1fr; }
+  .philoTabs { flex-direction: row; flex-wrap: wrap; position: static; }
+  .heroInner { grid-template-columns: 1fr; gap: 2rem; }
+  .portraitWrap { display: none; }
+  .heroLeft { padding-bottom: 3rem; }
+}
+
+@media (max-width: 768px) {
+  .bioGrid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .influenceGrid { grid-template-columns: repeat(2, 1fr); }
+  .ctaBox { flex-direction: column; align-items: flex-start; }
+  .inner { padding: 0 1.25rem; }
+  .heroInner { padding: 0 1.25rem; }
+}

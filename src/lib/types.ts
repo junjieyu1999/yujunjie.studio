@@ -20,6 +20,17 @@ export interface Artwork {
 
 export type FilterValue = 'all' | ArtworkStatus | ArtworkTheme;
 
+// One row in the artwork_images table — multiple per artwork
+export interface ArtworkImage {
+  id: string;
+  artwork_id: string;
+  url: string;
+  filename: string;
+  caption: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
 export interface Commission {
   id: string;
   painting_type: string | null;

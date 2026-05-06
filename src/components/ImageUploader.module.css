@@ -1,0 +1,222 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.artworkLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--aa);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--abo);
+}
+
+/* ── Drop zone ── */
+.dropzone {
+  aspect-ratio: 3 / 4;
+  max-height: 380px;
+  border: 1.5px dashed var(--abo);
+  border-radius: var(--radius);
+  background: var(--as);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  padding: 2rem;
+  text-align: center;
+}
+.dropzone:hover,
+.dragging {
+  border-color: var(--aa);
+  background: rgba(139, 104, 66, 0.04);
+}
+
+.dropIcon {
+  font-size: 1.5rem;
+  color: var(--am);
+  line-height: 1;
+}
+
+.dropText {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--am);
+}
+.dropText span {
+  color: var(--aa);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.dropHint {
+  font-size: 0.65rem;
+  color: var(--am);
+  opacity: 0.6;
+}
+
+/* ── Preview (chosen, not yet uploaded) ── */
+.previewWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.previewImg {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-height: 380px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--abo);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.previewBadge {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(26, 24, 20, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.previewActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Current saved image ── */
+.currentWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.currentImg {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  max-height: 380px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--abo);
+}
+
+.successBadge {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(139, 104, 66, 0.85);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 2px;
+}
+
+.currentActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ── Buttons ── */
+.btnUpload {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--aa);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btnUpload:hover:not(:disabled) { opacity: 0.88; }
+.btnUpload:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btnCancel,
+.btnReplace {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--am);
+  background: transparent;
+  border: 1px solid var(--abo);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+.btnCancel:hover,
+.btnReplace:hover {
+  color: var(--at);
+  border-color: rgba(26, 24, 20, 0.3);
+}
+
+.btnRemove {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #c0392b;
+  background: transparent;
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.btnRemove:hover:not(:disabled) {
+  background: rgba(192, 57, 43, 0.06);
+  border-color: rgba(192, 57, 43, 0.4);
+}
+.btnRemove:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* ── Hidden input ── */
+.hiddenInput {
+  display: none;
+}
+
+/* ── Error ── */
+.error {
+  font-size: 0.72rem;
+  color: #c0392b;
+  background: rgba(192, 57, 43, 0.06);
+  border: 1px solid rgba(192, 57, 43, 0.15);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.75rem;
+}

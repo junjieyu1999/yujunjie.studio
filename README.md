@@ -34,8 +34,10 @@ Then edit `.env.local`:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key-here
-OPENAI_API_KEY=sk-ant-your-key-here
+ANTHROPIC_API_KEY=sk-ant-your-key-here
 ```
+
+Get your Anthropic API key at [console.anthropic.com](https://console.anthropic.com).
 
 ### 4. Run locally
 
