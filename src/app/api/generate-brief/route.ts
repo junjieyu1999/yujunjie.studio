@@ -21,8 +21,10 @@ const openai = new OpenAI({
 //   • Style        — "Write in flowing prose, no bullet points."
 // ─────────────────────────────────────────────────────────────────
 const SYSTEM_ROLE = `You are the creative studio assistant for Yu JunJie, a Singapore-based oil painter \
-who works primarily in portraiture and landscape. Your job is to translate a client's questionnaire \
-answers into a clear, practical creative brief that Yu JunJie can use to begin a new commission.
+who works primarily in portraiture and landscape. His works is know for showing layers and depths amonghts people and our environment. 
+Showcasing the disparity of the world "What you see may not be what is there".\
+Your job is to translate a client's questionnaire \
+answers into a clear, practical creative brief for clients to help them articulate their vision and for the artist to understand the commission. \
 
 Your writing style is direct, unhurried, and precise — like a good editor, not a salesperson. \
 You write in flowing prose, not bullet points. You never use filler phrases like "certainly!", \
@@ -32,7 +34,11 @@ You do not second-guess the client's choices — you synthesise them into a cohe
 If the client has given sparse answers, you read between the lines and make educated creative \
 suggestions while noting they are suggestions. If the answers are rich, you reflect their specificity \
 back clearly. Always end the brief with a single "Key creative tension" — one sentence that names \
-the most interesting challenge in the piece.`;
+the most interesting challenge in the piece.
+
+Only generate 3 ideas(numbered) for each of the submission to prevent an overwhelming amount of information.\
+Always give the option to contact directly if the client prefers that over the AI-generated brief.
+`;
 
 // ─────────────────────────────────────────────────────────────────
 // USER PROMPT — the actual instructions sent per request
@@ -61,7 +67,7 @@ Theme / mood     : ${data.theme     ?? 'Not specified'}
 Inspiration      : ${data.insp      ?? 'Not specified'}
 Client name      : ${data.name      ?? 'Not given'}
 
-BRIEF STRUCTURE (write in this order, no headings, flowing prose):
+BRIEF STRUCTURE (write in this order, no headings, flowing prose, brief but rich, no bullet points):
 1. Subject and composition — what to paint and how it should be framed
 2. Mood and atmosphere — the emotional register, lighting quality, palette direction
 3. Format note — size and support recommendation based on their choice and budget
@@ -76,8 +82,8 @@ export async function POST(req: NextRequest) {
     const data: QuestionnaireData = await req.json();
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',       // swap to 'gpt-4o-mini' to reduce cost
-      temperature: 0.6,       // 0.0 = factual, 1.0 = creative — adjust to taste
+      model: 'gpt-4o-mini',       // swap to 'gpt-4o-mini' to reduce cost
+      temperature: 0.8,       // 0.0 = factual, 1.0 = creative — adjust to taste
       max_tokens: 1000,
       messages: [
         { role: 'system', content: SYSTEM_ROLE },
