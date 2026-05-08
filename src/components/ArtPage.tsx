@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import type { Artwork } from '@/lib/types';
 import Nav from './Nav';
-import Gallery from './Gallery';
+import GalleryWall from './Gallery3D';
 import ContactModal from './ContactModal';
 import CommissionQuestionnaire from './CommissionQuestionnaire';
 import styles from './ArtPage.module.css';
@@ -11,8 +11,8 @@ import styles from './ArtPage.module.css';
 interface Props { artworks: Artwork[]; }
 
 export default function ArtPage({ artworks }: Props) {
-  const [contactOpen, setContactOpen] = useState(false);
-  const [contactReason, setContactReason] = useState('');
+  const [contactOpen,    setContactOpen]    = useState(false);
+  const [contactReason,  setContactReason]  = useState('');
   const [commissionOpen, setCommissionOpen] = useState(false);
 
   const openContact = (reason = '') => {
@@ -27,7 +27,7 @@ export default function ArtPage({ artworks }: Props) {
         onCommissionOpen={() => setCommissionOpen(true)}
       />
       <main className={styles.main}>
-        <Gallery
+        <GalleryWall
           artworks={artworks}
           onCommissionOpen={() => setCommissionOpen(true)}
           onContactOpen={openContact}

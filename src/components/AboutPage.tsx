@@ -177,7 +177,7 @@ export default function AboutPage() {
         </section>
 
         {/* ── Influences ── */}
-        {/* <section className={styles.influences}>
+        <section className={styles.influences}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>Influences</div>
             <h2 className={styles.sectionHeading}>Artists I keep returning to</h2>
@@ -190,7 +190,7 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-        </section> */}
+        </section>
 
         {/* ── Process ── */}
         <section className={styles.process}>

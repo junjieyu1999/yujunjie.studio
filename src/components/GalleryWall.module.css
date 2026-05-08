@@ -1,0 +1,421 @@
+/* ── Wrapper ── */
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Hero ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: end;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3.5rem 2.5rem 3rem;
+  width: 100%;
+  animation: fadeUp 0.7s ease both;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--aa);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--aa);
+}
+
+.heading {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(2.8rem, 5vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--at);
+}
+.heading em { font-style: italic; color: var(--aa); }
+
+.heroDesc {
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: var(--am);
+  margin-bottom: 1.75rem;
+}
+
+.heroCtas { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+/* ── Buttons ── */
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--aa);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.btnPrimary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--at);
+  background: transparent;
+  border: 1px solid var(--abo);
+  border-radius: var(--radius);
+  padding: 0.65rem 1.3rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btnSecondary:hover { border-color: rgba(26,24,20,0.3); background: var(--as); }
+
+/* ── Filter strip ── */
+.filterStrip {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 2.5rem 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  flex-wrap: wrap;
+  animation: fadeUp 0.55s 0.1s ease both;
+}
+
+.filterBtn {
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--am);
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--abo);
+  border-radius: 2px;
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filterBtn:hover, .filterOn {
+  color: var(--at);
+  border-color: rgba(26,24,20,0.35);
+  background: rgba(26,24,20,0.04);
+}
+
+.dragHint {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--am);
+  opacity: 0.7;
+  transition: opacity 1.5s ease;
+}
+.dragHintHidden { opacity: 0; }
+
+.dragArrow {
+  font-size: 0.7rem;
+  animation: blink 2s infinite;
+}
+
+/* ── Gallery room ── */
+.room {
+  position: relative;
+  height: 580px;
+  overflow: hidden;
+  flex-shrink: 0;
+  animation: fadeIn 0.9s 0.2s ease both;
+}
+
+/* Wall surface */
+.wall {
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    #EDE8DE 0%,
+    #E8E3D8 55%,
+    #DDD7CB 100%
+  );
+  position: relative;
+}
+
+/* Subtle wall texture overlay */
+.wall::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(26,24,20,0.012) 2px,
+    rgba(26,24,20,0.012) 4px
+  );
+  pointer-events: none;
+}
+
+/* ── Track ── */
+.track {
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+  /* Hide scrollbar visually */
+  scrollbar-width: none;
+  padding-bottom: 80px; /* room for floor */
+}
+.track::-webkit-scrollbar { display: none; }
+.trackDragging { cursor: grabbing; }
+
+.trackPad {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+/* ── Individual painting ── */
+.paintingWrap {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 64px;
+  cursor: pointer;
+  position: relative;
+  transition: filter 0.3s ease;
+}
+.paintingWrap:hover { filter: drop-shadow(0 20px 40px rgba(0,0,0,0.18)); }
+
+/* Expanding state — click animation */
+.expanding {
+  animation: paintingExpand 0.5s ease forwards;
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Hanging wire */
+.wire {
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(26,24,20,0.2) 40%,
+    rgba(196,163,90,0.4) 100%
+  );
+  margin-bottom: 0;
+}
+
+/* ── Frame ── */
+.frame {
+  position: relative;
+  transition: transform 0.15s ease;
+  will-change: transform;
+}
+
+/* Gold frame border */
+.frameBorder {
+  padding: 10px;
+  background: linear-gradient(
+    135deg,
+    #D4B86A 0%,
+    #C4A35A 20%,
+    #B8933E 35%,
+    #D4B86A 50%,
+    #C4A35A 65%,
+    #B8933E 80%,
+    #D4B86A 100%
+  );
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(180,140,60,0.6),
+    inset 0 0 0 1px rgba(255,220,120,0.3),
+    0 8px 24px rgba(0,0,0,0.25),
+    0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Canvas */
+.canvas {
+  width: 240px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 1px;
+  position: relative;
+  background: var(--as);
+}
+
+.canvasImg {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.paintingWrap:hover .canvasImg { transform: scale(1.03); }
+
+.canvasPlaceholder {
+  width: 100%;
+  height: 100%;
+}
+
+/* Varnish sheen */
+.varnish {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transition: background 0.12s ease;
+}
+
+/* Status badge */
+.statusBadge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+.available   { background: rgba(139,104,66,0.2); color: var(--aa); }
+.sold        { background: rgba(26,24,20,0.1);   color: var(--am); }
+.in_progress { background: rgba(26,24,20,0.06);  color: var(--am); border: 1px dashed var(--abo); }
+
+/* Label */
+.label {
+  margin-top: 1rem;
+  text-align: center;
+  max-width: 260px;
+}
+.labelTitle {
+  font-family: 'Cormorant', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--at);
+  margin-bottom: 0.2rem;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.labelMeta {
+  font-size: 0.62rem;
+  font-weight: 300;
+  color: var(--am);
+  opacity: 0;
+  transition: opacity 0.25s 0.05s;
+}
+.paintingWrap:hover .labelTitle,
+.paintingWrap:hover .labelMeta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Floor ── */
+.floor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+}
+.floorLine {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(196,163,90,0.35) 20%,
+    rgba(196,163,90,0.5) 50%,
+    rgba(196,163,90,0.35) 80%,
+    transparent 100%
+  );
+}
+.floorShadow {
+  height: 79px;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.04) 0%,
+    transparent 100%
+  );
+}
+
+/* Edge fades */
+.fadeLeft, .fadeRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  pointer-events: none;
+  z-index: 10;
+}
+.fadeLeft {
+  left: 0;
+  background: linear-gradient(90deg, var(--ab) 0%, transparent 100%);
+}
+.fadeRight {
+  right: 0;
+  background: linear-gradient(270deg, var(--ab) 0%, transparent 100%);
+}
+
+/* ── Bottom CTA ── */
+.bottomCta {
+  background: var(--as);
+  border-top: 1px solid var(--abo);
+  border-bottom: 1px solid var(--abo);
+  margin-top: auto;
+  padding: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  animation: fadeUp 0.55s 0.3s ease both;
+}
+
+.ctaTitle {
+  font-family: 'Cormorant', serif;
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--at);
+  margin-bottom: 0.5rem;
+}
+.ctaBody {
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: var(--am);
+  line-height: 1.7;
+  max-width: 400px;
+}
+.ctaBtns { display: flex; gap: 0.75rem; flex-shrink: 0; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero       { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 1.25rem 1.5rem; }
+  .filterStrip { padding: 0 1.25rem 1rem; }
+  .room       { height: 460px; }
+  .canvas     { width: 180px; }
+  .bottomCta  { flex-direction: column; align-items: flex-start; padding: 2rem 1.25rem; }
+}
