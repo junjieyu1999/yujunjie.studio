@@ -116,17 +116,52 @@
   /* transform driven by JS */
 }
 
-/* ─── Individual painting ─────────────────────────────────────── */
+/* ─── Individual painting — position anchor ───────────────────── */
 .anchor {
   position: absolute;
-  /* Centered in 2D; 3D transform moves it into the corridor */
   left: 50%;
   top: 50%;
-  margin-left: -125px;  /* half of canvas width */
-  margin-top:  -167px;  /* half of 3:4 canvas height */
-  cursor: pointer;
+  /* centred; 3D transform moves to corridor position */
   transform-style: preserve-3d;
-  transition: filter 0.3s ease;
+}
+
+/*
+  Rotator — child of anchor, handles ONLY the facing angle.
+  Left wall:  rests at rotateY(85deg)  → swings to rotateY(0deg) on hover
+  Right wall: rests at rotateY(-85deg) → swings to rotateY(0deg) on hover
+
+  transform-origin is set to the wall-side edge so it swings OUT
+  toward the viewer like a door hinge, not spinning in place.
+*/
+.rotator {
+  position: relative;
+  /* offset so painting sits centred at the anchor point */
+  margin-left: -125px;
+  margin-top:  -167px;
+  transform-style: preserve-3d;
+  transition:
+    transform   0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    filter      0.4s ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+/* Left wall — hinge on left edge, swings right toward viewer */
+.rotatorLeft {
+  transform: rotateY(85deg);
+  transform-origin: left center;
+}
+
+/* Right wall — hinge on right edge, swings left toward viewer */
+.rotatorRight {
+  transform: rotateY(-85deg);
+  transform-origin: right center;
+}
+
+/* Flat state on hover */
+.rotatorFlat {
+  transform: rotateY(0deg) !important;
+  filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6));
 }
 
 .expanding {
@@ -231,70 +266,113 @@
 .sold        { background: rgba(255,255,255,0.2); }
 .in_progress { background: rgba(255,255,255,0.15); border: 1px dashed rgba(255,255,255,0.3); border-radius: 0; width: 8px; height: 8px; }
 
-/* ─── Info panel — artwork details on hover ───────────────────── */
+/* ─── Info panel — full-height half-screen side panel ─────────── */
 .infoPanel {
   position: absolute;
+  top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem 2.5rem;
-  background: linear-gradient(
-    0deg,
-    rgba(10,7,2,0.92) 0%,
-    rgba(10,7,2,0.75) 60%,
-    transparent 100%
-  );
-  transform: translateY(100%);
+  width: 50%;
+  display: flex;
+  align-items: center;
+  padding: 5rem 4rem;
   opacity: 0;
-  transition: transform 0.35s ease, opacity 0.35s ease;
   pointer-events: none;
   z-index: 20;
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
 }
-.infoPanelVisible {
-  transform: translateY(0);
+
+/* Painting on left wall → panel fills right half */
+.infoPanelRight {
+  right: 0;
+  justify-content: flex-start;
+  background: linear-gradient(270deg,
+    rgba(10,7,2,0.97) 0%,
+    rgba(10,7,2,0.88) 65%,
+    rgba(10,7,2,0.2) 100%
+  );
+  border-left: 1px solid rgba(196,163,90,0.12);
+  transform: translateX(60px);
+}
+.infoPanelVisible.infoPanelRight {
   opacity: 1;
+  transform: translateX(0);
+}
+
+/* Painting on right wall → panel fills left half */
+.infoPanelLeft {
+  left: 0;
+  justify-content: flex-end;
+  background: linear-gradient(90deg,
+    rgba(10,7,2,0.97) 0%,
+    rgba(10,7,2,0.88) 65%,
+    rgba(10,7,2,0.2) 100%
+  );
+  border-right: 1px solid rgba(196,163,90,0.12);
+  transform: translateX(-60px);
+}
+.infoPanelVisible.infoPanelLeft {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .infoPanelInner {
-  max-width: 500px;
+  max-width: 360px;
+  width: 100%;
+}
+
+.infoEyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.55);
+  margin-bottom: 0.75rem;
 }
 
 .infoTitle {
   font-family: 'Cormorant', serif;
-  font-size: 1.5rem;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
   font-weight: 300;
   color: rgba(255,255,255,0.92);
-  margin-bottom: 0.25rem;
+  line-height: 1.15;
   letter-spacing: 0.02em;
 }
 
+.infoDivider {
+  width: 32px;
+  height: 1px;
+  background: rgba(196,163,90,0.4);
+  margin: 1.25rem 0;
+}
+
 .infoMeta {
-  font-size: 0.7rem;
+  font-size: 0.78rem;
   font-weight: 300;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.42);
+  letter-spacing: 0.05em;
+  line-height: 1.8;
 }
 
 .infoStatus {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin-top: 0.9rem;
 }
 .infoStatus.available   { color: #C4A35A; }
-.infoStatus.sold        { color: rgba(255,255,255,0.3); }
-.infoStatus.in_progress { color: rgba(255,255,255,0.3); }
+.infoStatus.sold        { color: rgba(255,255,255,0.28); }
+.infoStatus.in_progress { color: rgba(255,255,255,0.28); }
 
-.infoClick {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.65rem;
-  letter-spacing: 0.05em;
-  text-transform: none;
+.infoCta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: rgba(196,163,90,0.6);
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(196,163,90,0.12);
   animation: blink 2.5s infinite;
 }
 
@@ -442,6 +520,68 @@
   animation: blink 2s infinite;
 }
 
+/* Reviews teaser — centered bottom pill, visible between walk hint and reaching end */
+.reviewsTeaser {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.65rem 1.6rem;
+  background: rgba(12,9,3,0.75);
+  border: 1px solid rgba(196,163,90,0.32);
+  border-radius: 2px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  pointer-events: none;
+  animation: teaserGlow 3s ease-in-out infinite;
+}
+.reviewsTeaserVisible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@keyframes teaserGlow {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(196,163,90,0.08);
+    border-color: rgba(196,163,90,0.28);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(196,163,90,0.22), 0 0 0 1px rgba(196,163,90,0.1);
+    border-color: rgba(196,163,90,0.55);
+  }
+}
+
+.reviewsTeaserQuote {
+  font-family: 'Cormorant', serif;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: rgba(196,163,90,0.75);
+  line-height: 1;
+}
+.reviewsTeaserLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.75);
+}
+.reviewsTeaserDivider {
+  color: rgba(196,163,90,0.3);
+  font-size: 0.6rem;
+}
+.reviewsTeaserArrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  animation: blink 2s infinite;
+}
+
 /* Progress bar — bottom of screen */
 .progressTrack {
   position: absolute;
@@ -450,6 +590,7 @@
   right: 0;
   height: 2px;
   background: rgba(255,255,255,0.06);
+  overflow: visible;
 }
 .progressBar {
   height: 100%;
@@ -459,11 +600,155 @@
   box-shadow: 0 0 8px rgba(196,163,90,0.4);
 }
 
+/* Pulsing gold pip at the far-right end of the progress track */
+.progressEndMarker {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(196,163,90,0.65);
+  box-shadow: 0 0 8px rgba(196,163,90,0.5);
+  animation: endMarkerPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes endMarkerPulse {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(196,163,90,0.4);
+    transform: translate(50%, -50%) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(196,163,90,0.75), 0 0 28px rgba(196,163,90,0.2);
+    transform: translate(50%, -50%) scale(1.5);
+  }
+}
+
+/* ─── Reviews overlay ───────────────────────────────────────── */
+.reviewsOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    rgba(20,14,5,0.96) 0%,
+    rgba(10,7,2,0.98) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.7s ease;
+}
+.reviewsVisible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.reviewsWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 680px;
+  padding: 0 2.5rem;
+}
+
+.reviewsEyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.5);
+  margin-bottom: 2.5rem;
+}
+
+.reviewCard {
+  animation: reviewFadeIn 0.65s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+
+@keyframes reviewFadeIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reviewQuote {
+  font-family: 'Cormorant', serif;
+  font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  margin-bottom: 2rem;
+}
+
+.reviewAuthor {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+}
+
+.reviewContext {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.5);
+}
+
+.reviewDots {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.reviewDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+.reviewDotActive {
+  background: rgba(196,163,90,0.75);
+  transform: scale(1.4);
+}
+
+.reviewsBack {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.35);
+  white-space: nowrap;
+  animation: blink 3s infinite;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .header      { flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 0; }
   .filters     { padding: 0.75rem 1.25rem 0; }
   .canvas      { width: 180px !important; }
-  .infoPanel   { padding: 1rem 1.25rem; }
+  .infoPanel      { width: 100%; top: auto; bottom: 0; height: auto; padding: 1.5rem 1.25rem; border: none; border-top: 1px solid rgba(196,163,90,0.12); }
+  .infoPanelRight { right: 0; background: linear-gradient(0deg, rgba(10,7,2,0.97) 0%, rgba(10,7,2,0.85) 80%, transparent 100%); transform: translateY(30px); }
+  .infoPanelLeft  { left: 0; background: linear-gradient(0deg, rgba(10,7,2,0.97) 0%, rgba(10,7,2,0.85) 80%, transparent 100%); transform: translateY(30px); }
+  .infoPanelVisible.infoPanelRight,
+  .infoPanelVisible.infoPanelLeft { transform: translateY(0); }
+  .infoPanelInner { max-width: 100%; }
+  .infoTitle      { font-size: 1.4rem; }
   .walkHint    { bottom: 3.5rem; font-size: 0.5rem; }
 }
