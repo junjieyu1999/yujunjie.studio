@@ -15,9 +15,9 @@ const Y_OFFSETS = [0, -25, 20, -35, 10, -18, 30, -8, -28, 15];
 
 const TESTIMONIALS = [
   {
-    quote: "Add your first review here. Describe the experience of commissioning a piece, or what the artwork means to you.",
-    name: "Collector Name",
-    context: "Commission · Portrait · 2024",
+    quote: "the work is genuinely so beautiful — you’re very talented and thoughtful, and the attention to detail is actually crazy. you can really feel the care and intention behind it, which makes it feel super personal and meaningful. honestly, you have such a good eye 🥹✨ and i’m always left wanting more of your art",
+    name: "Estefanía Fernández Pokou",
+    context: "Commission · Watercolour · 2025",
   },
   {
     quote: "Add your second review here. Perhaps share how the piece has transformed your space or the reactions it draws from guests.",
@@ -51,6 +51,7 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
   const viewportRef  = useRef<HTMLDivElement>(null);
   const sceneRef     = useRef<HTMLDivElement>(null);
   const progressRef  = useRef<HTMLDivElement>(null);
+  const roomRef      = useRef<HTMLDivElement>(null);
   const rafRef       = useRef<number>(0);
 
   const walkTarget   = useRef(0);
@@ -140,6 +141,11 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
       if (progressRef.current && maxWalk > 0) {
         progressRef.current.style.width = `${(walkCurrent.current / maxWalk) * 100}%`;
       }
+      if (roomRef.current && maxWalk > 0) {
+        const progress = Math.min(walkCurrent.current / maxWalk, 1);
+        const scale = 1 + progress * 1.8;
+        roomRef.current.style.transform = `scale(${scale})`;
+      }
       const nearEnd = maxWalk > 0 && walkCurrent.current >= maxWalk - 60;
       if (nearEnd !== atEndRef.current) {
         atEndRef.current = nearEnd;
@@ -186,14 +192,20 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
       onTouchMove={onTouchMove}
     >
       {/* Atmospheric room */}
-      <div className={styles.room}>
-        <div className={styles.floorGrid}   />
-        <div className={styles.ceilingGlow} />
-        <div className={styles.wallLeft}    />
-        <div className={styles.wallRight}   />
-        <div className={styles.fogFar}      />
-        <div className={styles.fogNear}     />
-        <div className={styles.centerLine}  />
+      <div ref={roomRef} className={styles.room}>
+        <div className={styles.ceilingShape}  />
+        <div className={styles.floorShape}    />
+        <div className={styles.wallLeft}      />
+        <div className={styles.wallRight}     />
+        <div className={styles.backWall}      />
+        <div className={styles.ceilingGlow}   />
+        <div className={styles.corridorLight} />
+        <div className={styles.fogFar}        />
+        <div className={styles.fogNear}       />
+        <div className={styles.backWallCard}>
+          <span className={styles.backWallQuote}>&ldquo;</span>
+          <div className={styles.backWallLabel}>Collector<br />Reviews</div>
+        </div>
       </div>
 
       {/* 3D scene */}
