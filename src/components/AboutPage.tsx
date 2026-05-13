@@ -11,34 +11,27 @@ import pageStyles from './ArtPage.module.css';
 
 const PHILOSOPHY_SECTIONS = [
   {
-    label: 'On observation',
-    heading: 'Painting begins before the brush touches canvas.',
-    body: `Every piece starts with a sustained act of looking — sometimes for days. I am less interested in what something looks like and more in what it feels like to be near it. The quality of light on a face at 4pm. The specific weight of a coastal horizon before rain. These are not decorative observations. They are the subject.\n\nI do not paint to record. I paint to ask why certain moments lodge themselves in memory and refuse to leave.`,
+    label: 'On looking',
+    heading: 'I see what most people miss.',
+    body: `Everything starts with observation — sometimes for days before anything is made. I am not interested in surfaces. I am interested in what sits underneath them: the weight a person carries, the way a coastline holds its breath before a wave, the specific quality of light that makes an ordinary moment worth remembering.\n\nI wait for that thing to reveal itself. Some people call it inspiration. I call it patience with your eyes open.`,
   },
   {
-    label: 'On oil paint',
-    heading: 'The medium is not neutral.',
-    body: `Oil paint has a particular relationship with time — both in the making and in the looking. Layers dry slowly, which means decisions compound. A mistake from day one lives underneath everything that follows. I find this honest. It mirrors how a life actually accumulates.\n\nI work almost exclusively in oils, primarily on canvas and linen. I am drawn to its capacity for both transparency and opacity — to glazes so thin the canvas breathes through them, and to impasto marks left exactly as placed.`,
+    label: 'On people',
+    heading: 'There is no good or evil. Only everything in between.',
+    body: `When I paint people, I am not painting a likeness. I am painting the complexity that makes them who they are — the contradictions, the histories, the quiet forces that shape every decision they've ever made.\n\nI don't believe in clean moral lines. People are gray areas, and I want my portraits to hold that. When you look at a face in my work, I want you to feel like you still don't quite have the full story. Because you don't. Neither do I.`,
   },
   {
-    label: 'On restraint',
-    heading: 'Less, until it is enough.',
-    body: `A painting is finished when removing anything would be a loss and adding anything would be noise. This is harder to reach than it sounds. The instinct is always to do more — to explain, to clarify, to fill. I try to resist this.\n\nMy palette rarely exceeds five or six colours on a given piece. Restricted palettes force coherence. They also force you to really understand what you are mixing and why, rather than reaching for a convenience.`,
+    label: 'On landscapes',
+    heading: 'Peace inside chaos.',
+    body: `The sea is never just the sea. There is always a stillness buried inside the violence of it — a moment of held breath between the chaos. That tension is what I am chasing in every landscape I make.\n\nI am not documenting geography. I am trying to freeze a feeling — the particular atmosphere of a place at a specific moment in time that will never exist again. Travel feeds this. Every new place shows me the world through a new set of eyes, and that is the closest thing I have to a creative practice outside the studio.`,
   },
   {
-    label: 'On subjects',
-    heading: 'Portraits and landscapes are the same question.',
-    body: `Both are fundamentally about interiority. A landscape, painted honestly, is not a description of geography — it is a mood made visible. A portrait, painted honestly, is not a likeness — it is a record of what it felt like to be in the presence of another person.\n\nThe subjects I return to most are faces that carry an interior life I find genuinely interesting, and places whose atmosphere is specific enough to feel like a personality. Singapore's late-afternoon light. Coastlines at the boundary between salt water and mangrove. The quality of a room where someone has been working alone for hours.`,
+    label: 'On the shimmer',
+    heading: 'There is always more than what you see.',
+    body: `I use a translucent shimmer — gold or silver — as a signature throughout my work. `
   },
 ];
 
-const INFLUENCES = [
-  { name: 'Vilhelm Hammershøi', note: 'Silence as a compositional element' },
-  { name: 'Lucian Freud', note: 'The weight of physical presence' },
-  { name: 'Andrew Wyeth', note: 'Restraint and emotional precision' },
-  { name: 'Giorgio Morandi', note: 'How repetition becomes a form of depth' },
-  { name: 'Rembrandt', note: 'Shadow as an active, not absent, thing' },
-];
 
 export default function AboutPage() {
   const [contactOpen, setContactOpen] = useState(false);
@@ -59,10 +52,11 @@ export default function AboutPage() {
             <div className={styles.heroLeft}>
               <div className={styles.eyebrow}>About the artist</div>
               <h1 className={styles.heroHeading}>
-                Yu <em>JunJie</em>
+                {/* Replace with your name */}
+                Your <em>Name</em>
               </h1>
               <p className={styles.heroSub}>
-                Oil painter. Singapore.
+                Artist. Based in Singapore.
                 <br />
                 Portraits and landscapes.
               </p>
@@ -83,7 +77,7 @@ export default function AboutPage() {
               <div className={styles.portraitImgWrap}>
                 <Image
                   src="/artist-photo.jpg"
-                  alt="Yu JunJie"
+                  alt="Artist photo"
                   fill
                   sizes="420px"
                   className={styles.portraitImg}
@@ -91,7 +85,7 @@ export default function AboutPage() {
                 />
               </div>
               <div className={styles.portraitCaption}>
-                Studio, Singapore · 2024
+                Studio, Singapore · 2026
               </div>
             </div>
           </div>
@@ -104,21 +98,22 @@ export default function AboutPage() {
               <div>
                 <div className={styles.sectionLabel}>Background</div>
                 <p className={styles.bioPara}>
-                  I came to painting through a long detour. Years of competitive water polo — early
-                  mornings, shared exhaustion, the discipline of a body in water — gave me an
-                  intimacy with light on surfaces and the particular quality of attention that comes
-                  from sustained physical practice.
+                  I make art because I have to. It is how I process the world past, present, and
+                  future. It is the only way I know to release what I see that others seem to
+                  walk straight past. The layers underneath things. The tension inside stillness.
+                  The gray area where most of the real human story lives.
                 </p>
                 <p className={styles.bioPara}>
-                  I began painting seriously in my mid-twenties, working through the traditional
-                  progression: cast drawing, still life, then figure. I have been working in oils
-                  ever since, primarily in portraiture and landscape, with a growing interest in
-                  interior scenes.
+                  Traveling is my primary fuel. Every new place puts me in front of people living
+                  their day-to-day lives in ways I haven't seen before, and that recalibrates
+                  everything. Singapore grounds me, but the work is shaped by everywhere I've moved
+                  through.
                 </p>
                 <p className={styles.bioPara}>
-                  I am based in Singapore, which shapes the work in ways I am still discovering.
-                  The light here is specific — high, direct, and relentless — and learning to paint
-                  it honestly has been one of the longer preoccupations of my practice.
+                  I work in bursts. Periods of deep observation and waiting, followed by intense
+                  focused making. I don't force the work. I wait until I have something to say,
+                  and then I say it as honestly as I can. A piece is finished when I step back
+                  and see the thing I originally felt. Not before.
                 </p>
               </div>
 
@@ -127,10 +122,10 @@ export default function AboutPage() {
                 <div className={styles.factList}>
                   {[
                     ['Based in', 'Singapore'],
-                    ['Medium', 'Oil on canvas, linen, board'],
-                    ['Primary subjects', 'Portraits, landscapes, interiors'],
+                    ['Primary subjects', 'Portraits, landscapes'],
+                    ['Signature', 'Translucent gold & silver shimmer'],
                     ['Commissions', 'Open — enquire below'],
-                    ['Typical turnaround', '6–14 weeks depending on size'],
+                    ['Driven by', 'Travel, people, the sea'],
                   ].map(([k, v]) => (
                     <div key={k} className={styles.fact}>
                       <span className={styles.factKey}>{k}</span>
@@ -147,7 +142,7 @@ export default function AboutPage() {
         <section className={styles.philosophy}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>Philosophy</div>
-            <h2 className={styles.sectionHeading}>How I think about painting</h2>
+            <h2 className={styles.sectionHeading}>How I think about making work</h2>
 
             <div className={styles.philoLayout}>
               {/* Tab nav */}
@@ -176,53 +171,38 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* ── Influences ── */}
-        <section className={styles.influences}>
-          <div className={styles.inner}>
-            <div className={styles.sectionLabel}>Influences</div>
-            <h2 className={styles.sectionHeading}>Artists I keep returning to</h2>
-            <div className={styles.influenceGrid}>
-              {INFLUENCES.map((inf) => (
-                <div key={inf.name} className={styles.influenceCard}>
-                  <div className={styles.influenceName}>{inf.name}</div>
-                  <div className={styles.influenceNote}>{inf.note}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ── Process ── */}
         <section className={styles.process}>
           <div className={styles.inner}>
             <div className={styles.sectionLabel}>Process</div>
-            <h2 className={styles.sectionHeading}>How a painting gets made</h2>
+            <h2 className={styles.sectionHeading}>How a piece gets made</h2>
             <div className={styles.processSteps}>
               {[
                 {
                   n: '01',
                   title: 'Observation',
-                  body: 'Before any marks are made, I spend time with the subject — in person where possible, from reference where not. I am looking for the specific thing that makes this subject worth painting at all.',
+                  body: 'Everything starts outside the studio. I watch, absorb, and wait. I am looking for the specific thing that makes this subject worth making at all. The feeling underneath the surface.',
                 },
                 {
                   n: '02',
-                  title: 'Toned ground',
-                  body: 'I rarely start on white. A burnt sienna or raw umber ground establishes a mid-tone and a warm temperature that influences every subsequent decision. It also makes the whites more luminous when they arrive.',
+                  title: 'Atmosphere',
+                  body: 'Before I make a mark I build the mood. Music that fits the emotional register of what I am trying to say. A mental map of where I want to go.',
                 },
                 {
                   n: '03',
-                  title: 'Massing',
-                  body: 'The painting is blocked in broadly — large shapes of light and shadow, no detail yet. This is where most of the real compositional decisions happen. Everything else is refinement.',
+                  title: 'Sketching and testing',
+                  body: 'Ideas get tested before they reach the canvas. Rough sketches, quick studies — I need to know if something works before I commit to it. This is where most ideas either sharpen or fall away.',
                 },
                 {
                   n: '04',
-                  title: 'Glazing and building',
-                  body: 'Transparent layers are built up in shadow areas. Lighter passages are added in opaque paint. The balance between transparency and opacity gives the surface its internal complexity.',
+                  title: 'The making',
+                  body: 'Once I am working, I work. Failures on the canvas are not mistakes, they are occurences. I build around them, incorporate them, let them become part of the piece.',
                 },
                 {
                   n: '05',
-                  title: 'The last marks',
-                  body: 'The final touches — a highlight, a signature edge — are placed last and left alone. The instinct to keep working is usually wrong. I try to stop the moment the painting says what it needs to say.',
+                  title: 'Knowing when to stop',
+                  body: 'A piece is finished when I step back and see my original vision looking back at me. Not when it is technically complete. Not when someone else says it is done. When I recognize what I felt at the beginning.',
                 },
               ].map((step) => (
                 <div key={step.n} className={styles.processStep}>
@@ -242,10 +222,10 @@ export default function AboutPage() {
           <div className={styles.inner}>
             <div className={styles.ctaBox}>
               <div>
-                <h3 className={styles.ctaHeading}>Interested in a commission?</h3>
+                <h3 className={styles.ctaHeading}>Want a piece made for you?</h3>
                 <p className={styles.ctaBody}>
-                  Take the questionnaire — a short set of questions that helps you articulate what
-                  you want. I use your answers as the creative brief.
+                  Commissions start with a conversation. Fill out the questionnaire and tell me
+                  what you have in mind — the more honest you are, the better the work will be.
                 </p>
               </div>
               <div className={styles.ctaButtons}>

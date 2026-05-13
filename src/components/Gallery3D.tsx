@@ -8,7 +8,7 @@ import styles from './Gallery3D.module.css';
 
 const SPACING  = 680;
 const WALL_X   = 430;
-const CANVAS_W = 250;
+const CANVAS_W = 340;
 const LERP     = 0.065;
 
 const Y_OFFSETS = [0, -25, 20, -35, 10, -18, 30, -8, -28, 15];
@@ -62,11 +62,14 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
   const [filter,        setFilter]        = useState<FilterValue>('all');
   const [hoveredId,     setHoveredId]     = useState<string | null>(null);
   const [hoveredIsLeft, setHoveredIsLeft] = useState<boolean>(true);
+  const [autoId,        setAutoId]        = useState<string | null>(null);
+  const [autoIsLeft,    setAutoIsLeft]    = useState<boolean>(true);
   const [expandingId,   setExpandingId]   = useState<string | null>(null);
   const [hint,          setHint]          = useState(true);
   const [atEnd,         setAtEnd]         = useState(false);
   const [reviewIdx,     setReviewIdx]     = useState(0);
-  const atEndRef = useRef(false);
+  const atEndRef  = useRef(false);
+  const autoIdRef = useRef<string | null>(null);
 
   const displayed = filter === 'all'
     ? artworks
@@ -74,7 +77,10 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
 
   const stations = Math.ceil(displayed.length / 2);
   const maxWalk  = Math.max(0, stations * SPACING - 200);
-  const hoveredArtwork = hoveredId ? displayed.find(a => a.id === hoveredId) ?? null : null;
+
+  const panelId      = hoveredId ?? autoId;
+  const panelIsLeft  = hoveredId ? hoveredIsLeft : autoIsLeft;
+  const hoveredArtwork = panelId ? displayed.find(a => a.id === panelId) ?? null : null;
 
   useEffect(() => {
     const t = setTimeout(() => setHint(false), 5000);
@@ -86,6 +92,8 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
     walkCurrent.current = 0;
     lookCurrent.current = 0;
     lookTarget.current  = 0;
+    autoIdRef.current   = null;
+    setAutoId(null);
   }, [filter]);
 
   // Scroll to walk
@@ -129,6 +137,8 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
   }, []);
   const onMouseLeave = useCallback(() => { lookTarget.current = 0; }, []);
 
+  const PROXIMITY = 460;
+
   // RAF loop
   useEffect(() => {
     const animate = () => {
@@ -151,11 +161,35 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
         atEndRef.current = nearEnd;
         setAtEnd(nearEnd);
       }
+
+      // Proximity-based popup: find the nearest painting within threshold
+      let nearestId: string | null = null;
+      let nearestIsLeft = true;
+      let nearestDist = Infinity;
+      displayed.forEach((artwork, i) => {
+        const station = Math.floor(i / 2);
+        const depth = -(station + 1) * SPACING;
+        const effectiveZ = depth + walkCurrent.current;
+        if (effectiveZ < 80 && effectiveZ > -PROXIMITY) {
+          const dist = Math.abs(effectiveZ);
+          if (dist < nearestDist) {
+            nearestId = artwork.id;
+            nearestDist = dist;
+            nearestIsLeft = i % 2 === 0;
+          }
+        }
+      });
+      if (nearestId !== autoIdRef.current) {
+        autoIdRef.current = nearestId;
+        setAutoId(nearestId);
+        if (nearestId !== null) setAutoIsLeft(nearestIsLeft);
+      }
+
       rafRef.current = requestAnimationFrame(animate);
     };
     rafRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [maxWalk]);
+  }, [maxWalk, displayed]);
 
   // Auto-advance carousel when reviews are visible
   useEffect(() => {
@@ -221,7 +255,10 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
                 key={artwork.id}
                 className={styles.anchor}
                 style={{ transform: pos }}
+                onMouseEnter={() => { setHoveredId(artwork.id); setHoveredIsLeft(isLeft); }}
+                onMouseLeave={() => setHoveredId(null)}
               >
+                <div className={styles.hitTarget} />
                 {/*
                   Rotator — this is the element that swings flat on hover.
                   Resting:  rotateY(85deg) or rotateY(-85deg) — nearly edge-on to viewer
@@ -238,8 +275,6 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
                     ${isExpanding ? styles.expanding   : ''}
                   `}
                   onClick={() => handleClick(artwork)}
-                  onMouseEnter={() => { setHoveredId(artwork.id); setHoveredIsLeft(isLeft); }}
-                  onMouseLeave={() => setHoveredId(null)}
                 >
                   <div className={`${styles.spotCone} ${isHovered ? styles.spotOn : ''}`} />
 
@@ -275,7 +310,7 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
       <div className={`
         ${styles.infoPanel}
         ${hoveredArtwork ? styles.infoPanelVisible : ''}
-        ${hoveredIsLeft ? styles.infoPanelRight : styles.infoPanelLeft}
+        ${panelIsLeft ? styles.infoPanelRight : styles.infoPanelLeft}
       `}>
         {hoveredArtwork && (
           <div className={styles.infoPanelInner}>
@@ -325,10 +360,6 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
           <div className={styles.headerLeft}>
             <div className={styles.eyebrow}>Oil on Canvas · Singapore</div>
             <h1 className={styles.heading}>Portraits &amp; <em>Landscapes</em></h1>
-          </div>
-          <div className={styles.headerRight}>
-            <button className={styles.btnPrimary} onClick={onCommissionOpen}>Commission a piece</button>
-            <button className={styles.btnGhost} onClick={() => onContactOpen('art-buy')}>Enquire to buy</button>
           </div>
         </div>
 

@@ -50,12 +50,12 @@ export default function Gallery({ artworks, onCommissionOpen, onContactOpen }: P
             own narrative.
           </p>
           <div className={styles.ctaRow}>
-            <button className={styles.btnPrimary} onClick={onCommissionOpen}>
+            {/* <button className={styles.btnPrimary} onClick={onCommissionOpen}>
               Commission a piece
             </button>
             <button className={styles.btnSecondary} onClick={() => onContactOpen('art-buy')}>
               Enquire to buy
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

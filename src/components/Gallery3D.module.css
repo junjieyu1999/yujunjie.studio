@@ -34,7 +34,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(10,7,4,1) 0%, rgba(16,12,7,1) 100%);
-  clip-path: polygon(0% 0%, 100% 0%, 58% 32%, 42% 32%);
+  clip-path: polygon(0% 0%, 100% 0%, 55% 38%, 45% 38%);
 }
 
 /* Floor — warm dark stone trapezoid from full bottom edge up to back-wall bottom */
@@ -42,7 +42,7 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(0deg, rgba(30,22,12,1) 0%, rgba(18,13,7,1) 100%);
-  clip-path: polygon(0% 100%, 100% 100%, 58% 62%, 42% 62%);
+  clip-path: polygon(0% 100%, 100% 100%, 55% 56%, 45% 56%);
 }
 
 /* Left wall — dark charcoal quad converging to left edge of back wall */
@@ -54,7 +54,7 @@
       rgba(196,163,90,0.06) 0, rgba(196,163,90,0.06) 1px,
       transparent 1px, transparent 80px),
     linear-gradient(90deg, rgba(46,34,20,1) 0%, rgba(32,24,14,1) 100%);
-  clip-path: polygon(0% 0%, 0% 100%, 42% 62%, 42% 32%);
+  clip-path: polygon(0% 0%, 0% 100%, 45% 56%, 45% 38%);
 }
 
 /* Right wall — mirror of left */
@@ -66,14 +66,14 @@
       rgba(196,163,90,0.06) 0, rgba(196,163,90,0.06) 1px,
       transparent 1px, transparent 80px),
     linear-gradient(270deg, rgba(46,34,20,1) 0%, rgba(32,24,14,1) 100%);
-  clip-path: polygon(100% 0%, 100% 100%, 58% 62%, 58% 32%);
+  clip-path: polygon(100% 0%, 100% 100%, 55% 56%, 55% 38%);
 }
 
 /* Back wall — the far end of the corridor visible between converging surfaces */
 .backWall {
   position: absolute;
-  left: 42%; right: 42%;
-  top: 32%; bottom: 38%;
+  left: 45%; right: 45%;
+  top: 38%; bottom: 44%;
   background: linear-gradient(180deg, rgba(22,16,10,1) 0%, rgba(16,12,7,1) 100%);
 }
 
@@ -173,7 +173,7 @@
 .sceneWrap {
   position: absolute;
   inset: 0;
-  perspective: 1100px;
+  perspective: 1600px;
   perspective-origin: 50% 44%; /* slightly above center = eye level */
 }
 
@@ -189,8 +189,18 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  /* centred; 3D transform moves to corridor position */
   transform-style: preserve-3d;
+}
+
+/* Invisible flat rectangle — no rotation so it always faces the viewer;
+   covers the full canvas area to make hover easy at any scroll depth */
+.hitTarget {
+  position: absolute;
+  width: 380px;
+  height: 510px;
+  top: -255px;
+  left: -190px;
+  cursor: pointer;
 }
 
 /*
@@ -204,8 +214,8 @@
 .rotator {
   position: relative;
   /* offset so painting sits centred at the anchor point */
-  margin-left: -125px;
-  margin-top:  -167px;
+  margin-left: -170px;
+  margin-top:  -227px;
   transform-style: preserve-3d;
   transition:
     transform   0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94),
@@ -292,7 +302,7 @@
 
 /* ─── Canvas ─────────────────────────────────────────────────── */
 .canvas {
-  width: 250px;
+  width: 340px;
   aspect-ratio: 3 / 4;
   overflow: hidden;
   position: relative;
@@ -810,7 +820,7 @@
 @media (max-width: 768px) {
   .header      { flex-direction: column; gap: 0.75rem; padding: 1.25rem 1.25rem 0; }
   .filters     { padding: 0.75rem 1.25rem 0; }
-  .canvas      { width: 180px !important; }
+  .canvas      { width: 220px !important; }
   .infoPanel      { width: 100%; top: auto; bottom: 0; height: auto; padding: 1.5rem 1.25rem; border: none; border-top: 1px solid rgba(196,163,90,0.12); }
   .infoPanelRight { right: 0; background: linear-gradient(0deg, rgba(10,7,2,0.97) 0%, rgba(10,7,2,0.85) 80%, transparent 100%); transform: translateY(30px); }
   .infoPanelLeft  { left: 0; background: linear-gradient(0deg, rgba(10,7,2,0.97) 0%, rgba(10,7,2,0.85) 80%, transparent 100%); transform: translateY(30px); }

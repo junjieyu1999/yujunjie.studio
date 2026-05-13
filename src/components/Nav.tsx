@@ -19,6 +19,7 @@ export default function Nav({ onContactOpen, onCommissionOpen }: NavProps) {
         <nav className={styles.links}>
           <Link href="/" className={styles.navLink}>Work</Link>
           <Link href="/about" className={styles.navLink}>About</Link>
+          <Link href="/contact" className={styles.navLink}>Contact</Link>
         </nav>
       </div>
 
