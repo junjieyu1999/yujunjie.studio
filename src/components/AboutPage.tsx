@@ -25,11 +25,6 @@ const PHILOSOPHY_SECTIONS = [
     heading: 'Peace inside chaos.',
     body: `The sea is never just the sea. There is always a stillness buried inside the violence of it — a moment of held breath between the chaos. That tension is what I am chasing in every landscape I make.\n\nI am not documenting geography. I am trying to freeze a feeling — the particular atmosphere of a place at a specific moment in time that will never exist again. Travel feeds this. Every new place shows me the world through a new set of eyes, and that is the closest thing I have to a creative practice outside the studio.`,
   },
-  {
-    label: 'On the shimmer',
-    heading: 'There is always more than what you see.',
-    body: `I use a translucent shimmer — gold or silver — as a signature throughout my work. `
-  },
 ];
 
 
@@ -52,8 +47,7 @@ export default function AboutPage() {
             <div className={styles.heroLeft}>
               <div className={styles.eyebrow}>About the artist</div>
               <h1 className={styles.heroHeading}>
-                {/* Replace with your name */}
-                Your <em>Name</em>
+                Yu <em>Jun Jie</em>
               </h1>
               <p className={styles.heroSub}>
                 Artist. Based in Singapore.
@@ -123,9 +117,9 @@ export default function AboutPage() {
                   {[
                     ['Based in', 'Singapore'],
                     ['Primary subjects', 'Portraits, landscapes'],
-                    ['Signature', 'Translucent gold & silver shimmer'],
+                    ['Signature', 'Smudging it out, leaving it raw'],
                     ['Commissions', 'Open — enquire below'],
-                    ['Driven by', 'Travel, people, the sea'],
+                    ['Driven by', 'Places, people, conflict'],
                   ].map(([k, v]) => (
                     <div key={k} className={styles.fact}>
                       <span className={styles.factKey}>{k}</span>
