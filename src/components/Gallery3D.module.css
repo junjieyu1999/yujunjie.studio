@@ -530,6 +530,47 @@
   background: rgba(255,255,255,0.09);
 }
 
+/* Postcards call-to-action (top right of the header) */
+.postcardCta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 260px;
+  padding: 0.7rem 1rem;
+  background: rgba(12,9,3,0.72);
+  border: 1px solid rgba(196,163,90,0.32);
+  border-radius: 2px;
+  text-decoration: none;
+  animation: teaserGlow 3s ease-in-out infinite;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.postcardCta:hover {
+  background: rgba(196,163,90,0.12);
+  transform: translateY(-1px);
+}
+.postcardCtaEyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.7);
+}
+.postcardCtaText {
+  font-family: 'Cormorant', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.25;
+  color: rgba(255,255,255,0.88);
+}
+.postcardCtaGo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(196,163,90,0.85);
+  margin-top: 0.15rem;
+}
+
 /* Filters */
 .filters {
   display: flex;
@@ -829,4 +870,6 @@
   .infoPanelInner { max-width: 100%; }
   .infoTitle      { font-size: 1.4rem; }
   .walkHint    { bottom: 3.5rem; font-size: 0.5rem; }
+  .postcardCta { max-width: none; width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.75rem; padding: 0.55rem 0.8rem; }
+  .postcardCtaText { font-size: 0.95rem; }
 }

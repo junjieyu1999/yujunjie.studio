@@ -3,6 +3,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/adminAuth';
+
+// Admin screens read through these routes, so never serve a cached copy of the database.
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -32,6 +37,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
+
   try {
     const { imageId, filename } = await req.json();
 

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import type { Artwork, ArtworkImage, ArtworkStatus } from '@/lib/types';
+import { authFetch } from '@/lib/adminFetch';
 import styles from './AdminPage.module.css';
 
 // ─────────────────────────────────────────────────────────────────
@@ -70,7 +71,7 @@ function ImageSlot({
       fd.append('file',       file);
       fd.append('artworkId',  artworkId);
       fd.append('sortOrder',  String(slot.key));
-      const res  = await fetch('/api/artworks/upload', { method: 'POST', body: fd });
+      const res  = await authFetch('/api/artworks/upload', { method: 'POST', body: fd });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error);
       // Fetch the new artwork_images row to get the id/filename
@@ -91,12 +92,18 @@ function ImageSlot({
     if (!window.confirm('Remove this image?')) return;
     setDeleting(true);
     try {
-      await fetch(`/api/artworks/${artworkId}/images`, {
+      const res = await authFetch(`/api/artworks/${artworkId}/images`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ imageId: image.id, filename: image.filename }),
       });
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        throw new Error(json.error ?? 'Remove failed');
+      }
       onDeleted();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Remove failed');
     } finally {
       setDeleting(false);
     }
@@ -225,7 +232,7 @@ export default function AdminPage() {
     setSaveErr('');
     try {
       if (mode === 'new') {
-        const res  = await fetch('/api/artworks', {
+        const res  = await authFetch('/api/artworks', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ ...form, sort_order: Number(form.sort_order) || 0 }),
@@ -239,7 +246,7 @@ export default function AdminPage() {
         setSaveMsg('Artwork created — you can now add images.');
         setTab('images');
       } else if (selected) {
-        const res  = await fetch('/api/artworks/upload', {
+        const res  = await authFetch('/api/artworks/upload', {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

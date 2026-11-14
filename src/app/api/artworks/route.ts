@@ -2,6 +2,11 @@
 // POST /api/artworks — create a new artwork row
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/adminAuth';
+
+// Admin screens read through these routes, so never serve a cached copy of the database.
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,6 +29,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
+
   try {
     const body = await req.json();
 

@@ -13,6 +13,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/adminAuth';
 
 // ── Use the SERVICE ROLE key here (server-side only, never expose to browser) ──
 // Add SUPABASE_SERVICE_ROLE_KEY to your .env.local
@@ -26,6 +27,9 @@ const supabaseAdmin = createClient(
 // POST — Upload image to Storage + write to artwork_images
 // ─────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
+
   try {
     const formData  = await req.formData();
     const file      = formData.get('file')      as File   | null;
@@ -122,6 +126,9 @@ export async function POST(req: NextRequest) {
 // Example: { id: "warm-light", fields: { status: "sold", title: "New Title" } }
 // ─────────────────────────────────────────────────────
 export async function PATCH(req: NextRequest) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
+
   try {
     const { id, fields } = await req.json();
 
@@ -158,6 +165,9 @@ export async function PATCH(req: NextRequest) {
 // Body: { artworkId: string, filename: string }
 // ─────────────────────────────────────────────────────
 export async function DELETE(req: NextRequest) {
+  const denied = await requireAdmin(req);
+  if (denied) return denied;
+
   try {
     const { artworkId, filename } = await req.json();
 
