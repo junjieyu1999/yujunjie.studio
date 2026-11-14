@@ -1,8 +1,15 @@
-import AdminPage from '@/components/AdminPage';
+import type { Metadata } from 'next';
+import AdminShell from '@/components/AdminShell';
 
-// This page is NOT linked from the nav — access it at /admin
-// Before going to production, protect this route with Supabase Auth
+// Private page: sign in with your Supabase admin account.
+// Only the emails listed in the ADMIN_EMAILS environment variable are let in,
+// and every write to the database is checked again on the server.
+
+export const metadata: Metadata = {
+  title: 'Admin — Yu JunJie',
+  robots: { index: false, follow: false },
+};
 
 export default function Admin() {
-  return <AdminPage />;
+  return <AdminShell />;
 }

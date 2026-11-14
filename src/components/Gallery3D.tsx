@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Artwork, FilterValue } from '@/lib/types';
@@ -361,6 +362,12 @@ export default function Gallery3D({ artworks, onCommissionOpen, onContactOpen }:
             <div className={styles.eyebrow}>Oil on Canvas · Singapore</div>
             <h1 className={styles.heading}>Portraits &amp; <em>Landscapes</em></h1>
           </div>
+
+          <Link href="/postcards" className={styles.postcardCta}>
+            <span className={styles.postcardCtaEyebrow}>New · Monthly snail mail</span>
+            <span className={styles.postcardCtaText}>A postcard from my travels, in your mailbox</span>
+            <span className={styles.postcardCtaGo}>Join the journey →</span>
+          </Link>
         </div>
 
         <div className={styles.filters}>
